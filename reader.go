@@ -299,6 +299,17 @@ func decodeLineOfMasterPlaylist(p *MasterPlaylist, state *decodingState, line st
 				state.variant.Captions = v
 			case "NAME":
 				state.variant.Name = v
+			case "AVERAGE-BANDWIDTH":
+				var val int
+				val, err = strconv.Atoi(v)
+				if strict && err != nil {
+					return err
+				}
+				state.variant.AverageBandwidth = uint32(val)
+			case "FRAME-RATE":
+				if state.variant.FrameRate, err = strconv.ParseFloat(v, 64); strict && err != nil {
+					return err
+				}
 			}
 		}
 	case state.tagStreamInf && !strings.HasPrefix(line, "#"):
